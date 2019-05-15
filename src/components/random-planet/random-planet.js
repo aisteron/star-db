@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import Spinner from '../spinner';
 import './random-planet.css';
+import icon from './death-star.png';
 import SwapiService from "../../services/swapi-service";
 
 export default class RandomPlanet extends Component {
+
   swapiService = new SwapiService();
 
 
@@ -13,10 +15,16 @@ export default class RandomPlanet extends Component {
       error: false
   };
 
-  constructor() {
-      super();
+
+  componentDidMount() {
       this.updatePlanet();
+      setInterval(this.updatePlanet, 25000);
   }
+
+  componentWillUnmount() {
+
+  }
+
   onPlanetLoaded = (planet) =>
   {
       this.setState({planet, loading: false})
@@ -27,10 +35,10 @@ export default class RandomPlanet extends Component {
         this.setState({
             error: true,
             loading: false
-        })
-  }
-  updatePlanet() {
-      const id = 11;
+        });
+  };
+  updatePlanet = () => {
+      const id = Math.floor(Math.random()*25) + 3;
       this.swapiService
           .getPlanet(id)
           .then(this.onPlanetLoaded)
@@ -45,6 +53,7 @@ export default class RandomPlanet extends Component {
       if (error) {
           return (
               <div className="random-planet jumbotron rounded spinnered">
+                  <img src={icon} alt="death star"/>
                   <p className="errP">Извините, произошла ошибка загрузки...</p>
               </div>
           );
