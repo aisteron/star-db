@@ -1,97 +1,101 @@
 import React, { Component } from 'react';
+
 import Spinner from '../spinner';
+import ErrorIndicator from '../error-indicator';
+import SwapiService from '../../services/swapi-service';
+
 import './random-planet.css';
-import icon from './death-star.png';
-import SwapiService from "../../services/swapi-service";
 
 export default class RandomPlanet extends Component {
 
   swapiService = new SwapiService();
 
-
   state = {
-      planet: {},
-      loading: true,
-      error: false
+    planet: {},
+    loading: true
   };
 
-
   componentDidMount() {
-      this.updatePlanet();
-      setInterval(this.updatePlanet, 25000);
+    this.updatePlanet();
+    this.interval = setInterval(this.updatePlanet, 10000);
   }
 
   componentWillUnmount() {
-
+    clearInterval(this.interval);
   }
 
-  onPlanetLoaded = (planet) =>
-  {
-      this.setState({planet, loading: false})
+  onPlanetLoaded = (planet) => {
+    this.setState({
+      planet,
+      loading: false,
+      error: false
+    });
   };
 
-  onError = (err) =>
-  {
-        this.setState({
-            error: true,
-            loading: false
-        });
+  onError = (err) => {
+    this.setState({
+      error: true,
+      loading: false
+    });
   };
+
   updatePlanet = () => {
-      const id = Math.floor(Math.random()*25) + 3;
-      this.swapiService
-          .getPlanet(id)
-          .then(this.onPlanetLoaded)
-          .catch(this.onError);
+    const id = Math.floor(Math.random()*17) + 2;
+    this.swapiService
+      .getPlanet(id)
+      .then(this.onPlanetLoaded)
+      .catch(this.onError);
   };
-
-
 
   render() {
-      const {planet: {id, name, population, rotationPeriod, diameter}, loading, error } = this.state;
+    const { planet, loading, error } = this.state;
 
-      if (error) {
-          return (
-              <div className="random-planet jumbotron rounded spinnered">
-                  <img src={icon} alt="death star"/>
-                  <p className="errP">Извините, произошла ошибка загрузки...</p>
-              </div>
-          );
-      }
-      if (loading) {
-          return (
-              <div className="random-planet jumbotron rounded spinnered">
-                  <Spinner/>
-              </div>
-          );
-      }
+    const hasData = !(loading || error);
 
-
-
-
+    const errorMessage = error ? <ErrorIndicator/> : null;
+    const spinner = loading ? <Spinner /> : null;
+    const content = hasData ? <PlanetView planet={planet}/> : null;
 
     return (
-
       <div className="random-planet jumbotron rounded">
-        <img className="planet-image"
-             src={`https://starwars-visualguide.com/assets/img/planets/${id}.jpg`} alt = {name}/>
-        <div>
-          <h4>{ name }</h4>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item">
-              <span className="term">Population:</span>
-              <span>{ population }</span>
-            </li>
-            <li className="list-group-item">
-              <span className="term">Rotation Period:</span>
-              <span>{ rotationPeriod }</span>
-            </li>
-            <li className="list-group-item">
-              <span className="term">Diameter:</span>
-              <span>{ diameter }</span>
-            </li>
-          </ul>
-        </div>
-      </div>);
+        {errorMessage}
+        {spinner}
+        {content}
+      </div>
+    );
   }
 }
+
+const PlanetView = ({ planet }) => {
+
+  const { id, name, population,
+    rotationPeriod, diameter } = planet;
+
+  return (
+    <React.Fragment>
+      <img className="planet-image"
+           src={`https://starwars-visualguide.com/assets/img/planets/${id}.jpg`}
+           alt="planet" />
+      <div>
+        <h4>{name}</h4>
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item">
+            <span className="term">Population</span>
+            <span>{population}</span>
+          </li>
+          <li className="list-group-item">
+            <span className="term">Rotation Period</span>
+            <span>{rotationPeriod}</span>
+          </li>
+          <li className="list-group-item">
+            <span className="term">Diameter</span>
+            <span>{diameter}</span>
+          </li>
+        </ul>
+      </div>
+    </React.Fragment>
+  );
+};
+
+
+
