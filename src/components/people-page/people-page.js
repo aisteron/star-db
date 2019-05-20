@@ -4,23 +4,33 @@ import ItemList from '../item-list/item-list';
 import PersonDetails from '../person-details/person-details';
 import ErrorIndicator from '../error-indicator/error-indicator';
 import SwapiService from '../../services/swapi-service';
+import ErrorBoundry from '../error-boundry/error-boundry';
 import './people-page.css';
+
+
+const Row = ({left, right}) => {
+    return (
+        <div className="row mb2">
+            <div className="col-md-6">
+                {left}
+            </div>
+            <div className="col-md-6">
+                {right}
+            </div>
+        </div>
+    );
+};
+
 
 export default class PeoplePage extends Component {
 
   swapiService = new SwapiService();
 
   state = {
-    selectedPerson: 3,
-    hasError: false
+    selectedPerson: 3
   };
 
-  componentDidCatch(error, info) {
 
-    this.setState({
-      hasError: true
-    });
-  }
 
   onPersonSelected = (selectedPerson) => {
     this.setState({ selectedPerson });
@@ -32,21 +42,29 @@ export default class PeoplePage extends Component {
       return <ErrorIndicator />;
     }
 
+    const itemList = (
+        <ItemList
+            onItemSelected={this.onPersonSelected}
+            getData ={this.swapiService.getAllPeople}
+
+        >
+        {(i) => (
+            `${i.name} (${i.gender})`
+        )}
+        </ItemList>
+    );
+
+    const personDetails = (
+        <PersonDetails
+            personId={this.state.selectedPerson}
+            getData ={this.swapiService.getAllPeople}
+        />
+    );
+
     return (
-      <div className="row mb2">
-        <div className="col-md-6">
-          <ItemList
-              onItemSelected={this.onPersonSelected}
-              getData ={this.swapiService.getAllPeople}
-          />
-        </div>
-        <div className="col-md-6">
-          <PersonDetails
-              personId={this.state.selectedPerson}
-              getData ={this.swapiService.getAllPeople}
-          />
-        </div>
-      </div>
+        <ErrorBoundry>
+          <Row left={itemList} right={personDetails} />
+        </ErrorBoundry>
     );
   }
 }
