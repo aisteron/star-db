@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 
-import './item-details.css';
-import SwapiService from "../../services/swapi-service";
-import ErrorButton from "../error-button/error-button";
+import ErrorButton from '../error-button/error-button';
+import SwapiService from '../../services/swapi-service';
 
-export default class ItemDetails extends Component {
+import './person-details.css';
+
+export default class PersonDetails extends Component {
 
   swapiService = new SwapiService();
 
@@ -13,39 +14,37 @@ export default class ItemDetails extends Component {
   };
 
   componentDidMount() {
-    this.updateItem();
+    this.updatePerson();
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.personId !== prevProps.personId) {
-      this.updateItem();
+      this.updatePerson();
     }
   }
 
-    updateItem() {
-        const { itemId, getData, getImageUrl } = this.props;
-        if (!itemId) {
-            return;
-        }
-
-        getData(itemId)
-            .then((item) => {
-                this.setState({
-                    item,
-                    image: getImageUrl(item)
-                });
-            });
+  updatePerson() {
+    const { personId } = this.props;
+    if (!personId) {
+      return;
     }
+
+    this.swapiService
+      .getPerson(personId)
+      .then((person) => {
+        this.setState({ person });
+      });
+  }
 
   render() {
 
-    const { item } = this.state;
-    if (!item) {
+    const { person } = this.state;
+    if (!person) {
       return <span>Select a person from a list</span>;
     }
 
     const { id, name, gender,
-              birthYear, eyeColor } = item;
+              birthYear, eyeColor } = person;
 
     return (
       <div className="person-details card">

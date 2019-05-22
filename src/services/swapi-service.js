@@ -44,7 +44,7 @@ export default class SwapiService {
   };
 
   getStarship = async (id) => {
-    const starship = await this.getResource(`/starships/${id}/`);
+    const starship = this.getResource(`/starships/${id}/`);
     return this._transformStarship(starship);
   };
 
@@ -57,13 +57,9 @@ export default class SwapiService {
     return {
       id: this._extractId(planet),
       name: planet.name,
-      diameter: planet.diameter,
-      gravity: planet.gravity,
-      orbitalPeriod: planet.orbital_period,
       population: planet.population,
-      terrain: planet.terrain,
-      climate: planet.climate,
       rotationPeriod: planet.rotation_period,
+      diameter: planet.diameter
     };
   };
 
