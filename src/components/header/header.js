@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 import './header.css';
 
@@ -7,9 +8,9 @@ const Header = ({onServiceChange}) => {
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
 
 
-          <a href="#/" className="navbar-brand">
+          <Link to="/" className="navbar-brand">
               StarDB
-          </a>
+          </Link>
 
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
                   aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,13 +19,13 @@ const Header = ({onServiceChange}) => {
           <div className="collapse navbar-collapse">
               <ul className="navbar-nav mr-auto">
                   <li className="nav-item">
-                      <a className="nav-link" href="#/people">People</a>
+                      <Link className="nav-link" to="/people">People</Link>
                   </li>
                   <li className="nav-item">
-                      <a className="nav-link" href="#/planets">Planets</a>
+                      <Link className="nav-link" to="/planets">Planets</Link>
                   </li>
                   <li className="nav-item">
-                      <a className="nav-link" href="#/starships">Starships</a>
+                      <Link className="nav-link" to="/starships">Starships</Link>
                   </li>
               </ul>
               <button
