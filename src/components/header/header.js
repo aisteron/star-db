@@ -19,13 +19,13 @@ const Header = ({onServiceChange}) => {
           <div className="collapse navbar-collapse">
               <ul className="navbar-nav mr-auto">
                   <li className="nav-item">
-                      <Link className="nav-link" to="/people">People</Link>
+                      <Link className="nav-link" to="/people/">People</Link>
                   </li>
                   <li className="nav-item">
-                      <Link className="nav-link" to="/planets">Planets</Link>
+                      <Link className="nav-link" to="/planets/">Planets</Link>
                   </li>
                   <li className="nav-item">
-                      <Link className="nav-link" to="/starships">Starships</Link>
+                      <Link className="nav-link" to="/starships/">Starships</Link>
                   </li>
               </ul>
               <button
