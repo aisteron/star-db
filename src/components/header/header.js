@@ -27,6 +27,12 @@ const Header = ({onServiceChange}) => {
                   <li className="nav-item">
                       <Link className="nav-link" to="/starships/">Starships</Link>
                   </li>
+                  <li className="nav-item">
+                      <Link className="nav-link" to="/login">Log in</Link>
+                  </li>
+                  <li className="nav-item">
+                      <Link className="nav-link" to="/secret">Secret</Link>
+                  </li>
               </ul>
               <button
                   type="button"
